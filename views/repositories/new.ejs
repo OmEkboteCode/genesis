@@ -1,0 +1,124 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2">
+
+    <h2 class="mb-4">Create New Repository</h2>
+
+    <form
+      method="POST"
+      action="/repositories"
+      novalidate
+      class="needs-validation"
+    >
+
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label">Repository Name</label>
+
+        <input
+          name="repository[name]"
+          placeholder="e.g. genesis"
+          type="text"
+          class="form-control"
+          id="name"
+          required
+        />
+
+        <div class="valid-feedback">
+          Name looks good!
+        </div>
+
+        <div class="invalid-feedback">
+          Please enter a repository name.
+        </div>
+      </div>
+
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+
+        <textarea
+          name="repository[description]"
+          placeholder="What is this repository about?"
+          class="form-control"
+          id="description"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+
+
+      <!-- Language -->
+      <div class="mb-3">
+        <label for="language" class="form-label">Language</label>
+
+        <input
+          name="repository[language]"
+          placeholder="e.g. JavaScript"
+          type="text"
+          class="form-control"
+          id="language"
+          required
+        />
+
+        <div class="invalid-feedback">
+          Please enter a language.
+        </div>
+      </div>
+
+
+      <!-- Visibility -->
+      <div class="mb-3">
+        <label for="visibility" class="form-label">Visibility</label>
+
+        <select
+          name="repository[visibility]"
+          class="form-select"
+          id="visibility"
+          required
+        >
+          <option value="" selected disabled>
+            Choose visibility
+          </option>
+
+          <option value="public">
+            Public
+          </option>
+
+          <option value="private">
+            Private
+          </option>
+        </select>
+
+        <div class="invalid-feedback">
+          Please select repository visibility.
+        </div>
+      </div>
+
+
+      <!-- Owner -->
+      <div class="mb-3">
+        <label for="owner" class="form-label">Owner</label>
+
+        <input
+          name="repository[owner]"
+          placeholder="e.g. Om"
+          type="text"
+          class="form-control"
+          id="owner"
+          required
+        />
+      </div>
+
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-primary">
+        Create Repository
+      </button>
+
+    </form>
+
+  </div>
+</div>

@@ -1,17 +1,19 @@
 <% layout("/layouts/boilerplate") %>
 
-<h3>All Repositories</h3>
-
-<div>
-    <% for(let repository of allRepository) { %>
-        <a href="/repositories/<%= repository._id %>" class="repository.link">
-            <div class="card col">
-                <div class="card-body">
-                    <p><b>
-                        <%= repository.name %>
-                    </b></p>
+<main class="container py-4">
+    <h3 class="mb-4">All Repositories</h3>
+    <div class="row row-cols-lg-3 g-4">
+        <% for(let repository of allRepository) { %>
+            <a href="/repositories/<%= repository._id %>" class="repository.link">
+                <div class="card col">
+                    <div class="card-body">
+                        <p class="card-text"><b>
+                            <%= repository.name %>
+                        </b></p>
+                    </div>
                 </div>
-            </div>
-        </a>
-    <% } %>
-</div>
+            </a>
+        <% } %>
+    </div>
+</main>
+

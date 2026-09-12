@@ -34,6 +34,8 @@ app.get("/", (req, res) => {
   res.send("Working");
 });
 
+//Index Route
+
 app.get(
   "/repositories",
   wrapAsync(async (req, res) => {
@@ -41,6 +43,14 @@ app.get(
     res.render("repositories/index.ejs", { allRepository });
   }),
 );
+
+// New Route
+
+app.get("/repositories/new", (req, res) => {
+  res.render("repositories/new.ejs");
+});
+
+// Show Route
 
 app.get(
   "/repositories/:id",
@@ -50,6 +60,21 @@ app.get(
     res.render("repositories/show.ejs", { repository });
   }),
 );
+
+// Create Route
+
+app.post(
+  "/repositories",
+  wrapAsync(async (req, res, next) => {
+    const newRepository = new Repository(req.body.repository);
+    await newRepository.save();
+    res.redirect("/repositories");
+  }),
+);
+
+// Edit Route
+
+
 
 app.listen(3000, () => {
   console.log("Server is Listening to Port 3000");
