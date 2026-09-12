@@ -1,0 +1,17 @@
+<% layout("/layouts/boilerplate") %>
+
+<h3>All Repositories</h3>
+
+<div>
+    <% for(let repository of allRepository) { %>
+        <a href="/repositories/<%= repository._id %>" class="repository.link">
+            <div class="card col">
+                <div class="card-body">
+                    <p><b>
+                        <%= repository.name %>
+                    </b></p>
+                </div>
+            </div>
+        </a>
+    <% } %>
+</div>
