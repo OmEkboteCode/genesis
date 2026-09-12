@@ -94,6 +94,8 @@ app.get(
   }),
 );
 
+// Update Route
+
 app.put(
   "/repositories/:id",
   wrapAsync(async (req, res) => {
@@ -102,6 +104,19 @@ app.put(
     res.redirect(`/repositories/${id}`);
   }),
 );
+
+// Delete Route
+
+app.delete(
+    "/repositories/:id",
+    wrapAsync(async (req, res) => {
+        let { id } = req.params;
+        let deletedRepository = await Repository.findByIdAndDelete(id);
+        console.log(deletedRepository);
+        res.redirect("/repositories")
+    })
+)
+
 
 app.listen(3000, () => {
   console.log("Server is Listening to Port 3000");
