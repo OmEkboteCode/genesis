@@ -1,16 +1,67 @@
 <% layout("/layouts/boilerplate") %>
 
-<h3>Repository Details</h3>
+<div class="row mt-4">
+  <div class="col-8 offset-2">
 
-<div>
-    <div>
-        <p>
-            <b><%= repository.name %></b><br>
-            <%= repository.description %> <br>
-            <%= repository.language %> <br>
-            <%= repository.visibility %> <br>
-            <%= repository.owner %> <br>
-            <%= repository.createdAt %> <br>
+    <h3 class="mb-4">Repository Details</h3>
+
+    <div class="card show-card">
+
+      <div class="card-body">
+
+        <!-- Repository Name -->
+        <h4 class="card-title mb-3">
+          <%= repository.name %>
+        </h4>
+
+        <!-- Description -->
+        <p class="card-text">
+          <%= repository.description || "No description provided." %>
         </p>
+
+        <hr>
+
+        <!-- Repository Information -->
+        <p class="card-text">
+          <strong>Language:</strong>
+          <%= repository.language || "Not specified" %>
+        </p>
+
+        <p class="card-text">
+          <strong>Visibility:</strong>
+          <%= repository.visibility %>
+        </p>
+
+        <p class="card-text">
+          <strong>Owner:</strong>
+          <%= repository.owner || "Not specified" %>
+        </p>
+
+        <p class="card-text">
+          <strong>Created:</strong>
+          <%= repository.createdAt.toLocaleString() %>
+        </p>
+
+        <!-- Actions -->
+        <div class="mt-4">
+          <a
+            href="/repositories/<%= repository._id %>/edit"
+            class="btn btn-success"
+          >
+            Edit
+          </a>
+
+          <a
+            href="/repositories"
+            class="btn btn-secondary"
+          >
+            Back to Repositories
+          </a>
+        </div>
+
+      </div>
+
     </div>
+
+  </div>
 </div>

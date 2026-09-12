@@ -7,6 +7,7 @@ const Repository = require("./models/repository.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const ejsMate = require("ejs-mate");
+const { repositorySchema } = require("./schema.js");
 // const { repositorySchema } = require("./schema.js")
 
 const MONGO_URL = `mongodb://127.0.0.1:27017/genesis`;
@@ -33,6 +34,16 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.get("/", (req, res) => {
   res.send("Working");
 });
+
+const validateRepository = (req, res, next) => {
+  let { error } = repositorySchema.validate(req.body);
+  if (error) {
+    let errorMessage = error.details.map((el) => el.elMessage).join(",");
+    throw new ExpressError(400, errorMessage);
+  } else {
+    next();
+  }
+};
 
 //Index Route
 
@@ -74,7 +85,23 @@ app.post(
 
 // Edit Route
 
+app.get(
+  "/repositories/:id/edit",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    const repository = await Repository.findById(id);
+    res.render("repositories/edit.ejs", { repository });
+  }),
+);
 
+app.put(
+  "/repositories/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    await Repository.findByIdAndUpdate(id, { ...req.body.repository });
+    res.redirect(`/repositories/${id}`);
+  }),
+);
 
 app.listen(3000, () => {
   console.log("Server is Listening to Port 3000");

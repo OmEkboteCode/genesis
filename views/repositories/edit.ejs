@@ -1,0 +1,130 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-2">
+  <div class="col-8 offset-2">
+
+    <h2 class="mb-4">Edit Repository</h2>
+
+    <form
+      method="POST"
+      action="/repositories/<%= repository._id %>?_method=PUT"
+      novalidate
+      class="needs-validation"
+    >
+
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label">
+          Repository Name
+        </label>
+
+        <input
+          type="text"
+          name="repository[name]"
+          value="<%= repository.name %>"
+          class="form-control"
+          placeholder="Enter Name"
+          id="name"
+          required
+        />
+
+        <div class="valid-feedback">
+          Name looks good!
+        </div>
+
+        <div class="invalid-feedback">
+          Please enter a repository name.
+        </div>
+      </div>
+
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">
+          Description
+        </label>
+
+        <textarea
+          name="repository[description]"
+          class="form-control"
+          placeholder="What is this repository about?"
+          id="description"
+          rows="4"
+        ><%= repository.description || "" %></textarea>
+      </div>
+
+
+      <!-- Language -->
+      <div class="mb-3">
+        <label for="language" class="form-label">
+          Language
+        </label>
+
+        <input
+          type="text"
+          name="repository[language]"
+          value="<%= repository.language || "" %>"
+          class="form-control"
+          placeholder="e.g. JavaScript"
+          id="language"
+        />
+
+        <div class="invalid-feedback">
+          Please enter a language.
+        </div>
+      </div>
+
+
+      <!-- Visibility -->
+      <div class="mb-3">
+        <label for="visibility" class="form-label">
+          Visibility
+        </label>
+
+        <select
+          name="repository[visibility]"
+          class="form-select"
+          id="visibility"
+          required
+        >
+          <option value="public" <%= repository.visibility === "public" ? "selected" : "" %>>
+            Public
+          </option>
+
+          <option value="private" <%= repository.visibility === "private" ? "selected" : "" %>>
+            Private
+          </option>
+        </select>
+
+        <div class="invalid-feedback">
+          Please select repository visibility.
+        </div>
+      </div>
+
+
+      <!-- Owner -->
+      <div class="mb-3">
+        <label for="owner" class="form-label">
+          Owner
+        </label>
+
+        <input
+          type="text"
+          name="repository[owner]"
+          value="<%= repository.owner || "" %>"
+          class="form-control"
+          placeholder="e.g. Om"
+          id="owner"
+        />
+      </div>
+
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-primary">
+        Update Repository
+      </button>
+
+    </form>
+
+  </div>
+</div>
