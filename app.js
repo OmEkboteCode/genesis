@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 const validateRepository = (req, res, next) => {
   let { error } = repositorySchema.validate(req.body);
   if (error) {
-    let errorMessage = error.details.map((el) => el.elMessage).join(",");
+    let errorMessage = error.details.map((el) => el.message).join(",");
     throw new ExpressError(400, errorMessage);
   } else {
     next();
@@ -76,6 +76,7 @@ app.get(
 
 app.post(
   "/repositories",
+  validateRepository,
   wrapAsync(async (req, res, next) => {
     const newRepository = new Repository(req.body.repository);
     await newRepository.save();
@@ -98,6 +99,7 @@ app.get(
 
 app.put(
   "/repositories/:id",
+  validateRepository,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Repository.findByIdAndUpdate(id, { ...req.body.repository });
@@ -108,15 +110,23 @@ app.put(
 // Delete Route
 
 app.delete(
-    "/repositories/:id",
-    wrapAsync(async (req, res) => {
-        let { id } = req.params;
-        let deletedRepository = await Repository.findByIdAndDelete(id);
-        console.log(deletedRepository);
-        res.redirect("/repositories")
-    })
-)
+  "/repositories/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    let deletedRepository = await Repository.findByIdAndDelete(id);
+    console.log(deletedRepository);
+    res.redirect("/repositories");
+  }),
+);
 
+app.all("/{*splat}", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!"));
+});
+
+app.use((err, req, res, next) => {
+  let { statusCode = 500, message = "Something Went Wrong" } = err;
+  res.status(statusCode).render("error.ejs", { err, message });
+});
 
 app.listen(3000, () => {
   console.log("Server is Listening to Port 3000");
