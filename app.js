@@ -4,6 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const Repository = require("./models/repository.js");
+const User = require("./models/user.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const ejsMate = require("ejs-mate");
@@ -67,7 +68,8 @@ app.get(
   "/repositories/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const repository = await Repository.findById(id);
+    const repository = await Repository.findById(id).populate("owner");
+    console.log(repository)
     res.render("repositories/show.ejs", { repository });
   }),
 );
@@ -118,6 +120,7 @@ app.delete(
     res.redirect("/repositories");
   }),
 );
+
 
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
