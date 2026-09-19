@@ -40,6 +40,15 @@
 
   <!-- Navigation -->
   <div class="mt-4">
+      <form
+        method="POST"
+        action="/users/<%= user._id %>?_method=DELETE"
+        class="d-inline"
+      >
+        <button class="btn btn-danger">
+          Delete User
+        </button>
+      </form>
     <a href="/users" class="btn btn-secondary">
       Back to Users
     </a>

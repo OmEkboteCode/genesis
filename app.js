@@ -141,12 +141,26 @@ app.get(
   }),
 );
 
-app.get("/users/:id/repositories", wrapAsync(async (req,res) => {
-    let {id} = req.params;
-    const user = await User.findById(id)
-    const repositories = await Repository.find({owner: id})
-    res.render("users/show.ejs", {repositories, user})
-}))
+app.get(
+  "/users/:id/repositories",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    const user = await User.findById(id);
+    const repositories = await Repository.find({ owner: id });
+    res.render("users/show.ejs", { repositories, user });
+  }),
+);
+
+// Delete User Route
+
+app.delete(
+  "/users/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.redirect("/users");
+  }),
+);
 
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
