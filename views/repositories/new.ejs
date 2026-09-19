@@ -2,7 +2,6 @@
 
 <div class="row">
   <div class="col-8 offset-2">
-
     <h2 class="mb-4">Create New Repository</h2>
 
     <form
@@ -11,7 +10,6 @@
       novalidate
       class="needs-validation"
     >
-
       <!-- Name -->
       <div class="mb-3">
         <label for="name" class="form-label">Repository Name</label>
@@ -25,15 +23,10 @@
           required
         />
 
-        <div class="valid-feedback">
-          Name looks good!
-        </div>
+        <div class="valid-feedback">Name looks good!</div>
 
-        <div class="invalid-feedback">
-          Please enter a repository name.
-        </div>
+        <div class="invalid-feedback">Please enter a repository name.</div>
       </div>
-
 
       <!-- Description -->
       <div class="mb-3">
@@ -47,8 +40,10 @@
           rows="4"
           required
         ></textarea>
+        <div class="invalid-feedback">
+          Please enter a repository description.
+        </div>
       </div>
-
 
       <!-- Language -->
       <div class="mb-3">
@@ -63,11 +58,8 @@
           required
         />
 
-        <div class="invalid-feedback">
-          Please enter a language.
-        </div>
+        <div class="invalid-feedback">Please enter a language.</div>
       </div>
-
 
       <!-- Visibility -->
       <div class="mb-3">
@@ -79,24 +71,15 @@
           id="visibility"
           required
         >
-          <option value="" selected disabled>
-            Choose visibility
-          </option>
+          <option value="" selected disabled>Choose visibility</option>
 
-          <option value="public">
-            Public
-          </option>
+          <option value="public">Public</option>
 
-          <option value="private">
-            Private
-          </option>
+          <option value="private">Private</option>
         </select>
 
-        <div class="invalid-feedback">
-          Please select repository visibility.
-        </div>
+        <div class="invalid-feedback">Please select repository visibility.</div>
       </div>
-
 
       <!-- Owner -->
       <div class="mb-3">
@@ -110,15 +93,11 @@
           id="owner"
           required
         />
+        <div class="invalid-feedback">Please Enter Owner Name</div>
       </div>
 
-
       <!-- Submit -->
-      <button type="submit" class="btn btn-primary">
-        Create Repository
-      </button>
-
+      <button type="submit" class="btn btn-primary">Create Repository</button>
     </form>
-
   </div>
 </div>
