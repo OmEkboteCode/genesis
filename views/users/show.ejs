@@ -1,0 +1,48 @@
+<% layout("/layouts/boilerplate") %>
+
+<main class="container py-4">
+
+  <!-- User Header -->
+  <div class="mb-4">
+    <h3 class="mb-1">
+      <%= user.username %>
+    </h3>
+
+
+  </div>
+
+  <!-- Repository List -->
+  <div class="repository-list">
+        <h5 class="mb-0">
+      Repositories
+    </h5>
+    <% if(repositories.length === 0) { %>
+        <div class="py-4 border-bottom">
+            <p class="text-muted mb-0">User Doesn't Have Any Repositories Yet.</p>
+        </div>
+    <% } else { %>
+        <% for(let repository of repositories) {%>
+            <div class="repository-item py-4 border-bottom">
+                <h6>
+                    <a href="/repositories/<%= repository._id %>" class="text-decoration-none">
+                        <%= repository.name %>
+                    </a>
+                </h6>
+          <% if (repository.description) { %>
+            <p class="text-muted mb-2">
+              <%= repository.description %>
+            </p>
+            </div>
+            <% } %>
+        <% } %>
+    <% } %>
+  </div>
+
+  <!-- Navigation -->
+  <div class="mt-4">
+    <a href="/users" class="btn btn-secondary">
+      Back to Users
+    </a>
+  </div>
+
+</main>

@@ -83,12 +83,13 @@ app.post(
     const username = req.body.repository.owner;
     const existingUser = await User.findOne({ username: username });
     if (existingUser === null) {
-        throw new ExpressError(404, "User Not Found")
+      throw new ExpressError(404, "User Not Found");
     }
 
     const newRepository = new Repository({
-        ...req.body.repository,
-    owner: existingUser._id});
+      ...req.body.repository,
+      owner: existingUser._id,
+    });
 
     await newRepository.save();
     res.redirect("/repositories");
@@ -129,6 +130,23 @@ app.delete(
     res.redirect("/repositories");
   }),
 );
+
+// Users
+
+app.get(
+  "/users",
+  wrapAsync(async (req, res) => {
+    const allUsers = await User.find({});
+    res.render("users/index.ejs", { allUsers });
+  }),
+);
+
+app.get("/users/:id/repositories", wrapAsync(async (req,res) => {
+    let {id} = req.params;
+    const user = await User.findById(id)
+    const repositories = await Repository.find({owner: id})
+    res.render("users/show.ejs", {repositories, user})
+}))
 
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
