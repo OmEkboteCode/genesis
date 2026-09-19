@@ -69,7 +69,7 @@ app.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const repository = await Repository.findById(id).populate("owner");
-    console.log(repository)
+    console.log(repository);
     res.render("repositories/show.ejs", { repository });
   }),
 );
@@ -80,7 +80,16 @@ app.post(
   "/repositories",
   validateRepository,
   wrapAsync(async (req, res, next) => {
-    const newRepository = new Repository(req.body.repository);
+    const username = req.body.repository.owner;
+    const existingUser = await User.findOne({ username: username });
+    if (existingUser === null) {
+        throw new ExpressError(404, "User Not Found")
+    }
+
+    const newRepository = new Repository({
+        ...req.body.repository,
+    owner: existingUser._id});
+
     await newRepository.save();
     res.redirect("/repositories");
   }),
@@ -92,7 +101,7 @@ app.get(
   "/repositories/:id/edit",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const repository = await Repository.findById(id);
+    const repository = await Repository.findById(id).populate("owner");
     res.render("repositories/edit.ejs", { repository });
   }),
 );
@@ -120,7 +129,6 @@ app.delete(
     res.redirect("/repositories");
   }),
 );
-
 
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
