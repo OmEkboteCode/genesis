@@ -51,7 +51,7 @@ const validateRepository = (req, res, next) => {
 app.get(
   "/repositories",
   wrapAsync(async (req, res) => {
-    const allRepository = await Repository.find({});
+    const allRepository = await Repository.find({}).populate("owner");
     res.render("repositories/index.ejs", { allRepository });
   }),
 );
