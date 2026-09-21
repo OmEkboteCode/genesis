@@ -1,43 +1,87 @@
+/* =========================
+   Base
+========================= */
+
 body {
-    background-color: #ffffff;
-    color: #24292f;
+    background-color: #f8faff;
+    color: #1f2937;
 }
 
-/* Navbar */
+
+/* =========================
+   Navbar
+========================= */
 
 .navbar {
-    background-color: #f6f8fa !important;
+    background: linear-gradient(90deg, #111827, #1e293b) !important;
+    border-bottom: none !important;
 }
 
 .navbar-brand {
+    color: #ffffff !important;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
 }
 
 .nav-link {
-    color: #57606a;
+    color: #cbd5e1 !important;
+    transition: color 0.2s ease;
 }
 
 .nav-link:hover {
-    color: #24292f;
+    color: #ffffff !important;
 }
 
 
-/* Page */
+/* =========================
+   Page
+========================= */
 
 .container {
     max-width: 1000px;
 }
 
 
-/* Repository List */
+/* =========================
+   Headings
+========================= */
+
+h3,
+h2 {
+    color: #172554;
+}
+
+.text-muted {
+    color: #64748b !important;
+}
+
+
+/* =========================
+   Repository List
+========================= */
 
 .repository-list {
-    border-top: 1px solid #d0d7de;
+    border-top: 1px solid #dbe4f0;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .repository-item {
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid #e2e8f0;
+    padding-left: 22px;
+    padding-right: 22px;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.repository-item:last-child {
+    border-bottom: none;
+}
+
+.repository-item:hover {
+    background-color: #f1f5ff;
 }
 
 .repository-item h5 {
@@ -45,88 +89,152 @@ body {
 }
 
 .repository-item a {
-    color: #0969da;
+    color: #2563eb;
 }
 
 .repository-item a:hover {
+    color: #7c3aed;
     text-decoration: underline !important;
 }
 
 .repository-owner {
-    color: #57606a;
+    color: #64748b;
     font-size: 14px;
 }
 
 .repository-date {
-    color: #6e7781;
+    color: #94a3b8;
     font-size: 13px;
 }
 
 
-/* Repository Details */
+/* =========================
+   Repository Details
+========================= */
 
 .show-card {
-    border: 1px solid #d0d7de;
-    border-radius: 8px;
-    box-shadow: none;
+    background-color: #ffffff;
+    border: 1px solid #dbe4f0;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(30, 64, 175, 0.08);
 }
 
 .show-card .card-body {
-    padding: 28px;
+    padding: 30px;
 }
 
 .repository-title {
-    font-size: 28px;
-    font-weight: 600;
+    color: #172554;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 
-/* Forms */
+/* =========================
+   Forms
+========================= */
 
 .form-control,
 .form-select {
-    border-color: #d0d7de;
-    border-radius: 6px;
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+    border-radius: 7px;
 }
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #0969da;
-    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 .form-label {
+    color: #334155;
     font-weight: 600;
 }
 
 
-/* Buttons */
+/* =========================
+   Buttons
+========================= */
 
 .btn {
-    border-radius: 6px;
+    border-radius: 7px;
+    font-weight: 500;
 }
 
 .btn-primary {
-    background-color: #1f883d;
-    border-color: #1f883d;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    border: none;
 }
 
 .btn-primary:hover {
-    background-color: #1a7f37;
-    border-color: #1a7f37;
+    background: linear-gradient(135deg, #1d4ed8, #4338ca);
+}
+
+.btn-outline-secondary {
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #eef2ff;
+    color: #3730a3;
 }
 
 
-/* Users */
+/* =========================
+   Repository Visibility
+========================= */
+
+.badge {
+    background-color: #eef2ff !important;
+    border-color: #c7d2fe !important;
+    color: #4338ca !important;
+    font-weight: 500;
+}
+
+
+/* =========================
+   Users
+========================= */
+
+.users-list {
+    background-color: #ffffff;
+    border-top: 1px solid #dbe4f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
 
 .user-item {
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid #e2e8f0;
+    padding-left: 22px;
+    padding-right: 22px;
+    transition: background-color 0.2s ease;
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-item:hover {
+    background-color: #f5f3ff;
 }
 
 .user-item a {
-    color: #0969da;
+    color: #2563eb;
 }
 
 .user-item a:hover {
+    color: #7c3aed;
     text-decoration: underline !important;
+}
+
+
+/* =========================
+   Small Accent
+========================= */
+
+hr {
+    border-color: #e2e8f0;
+    opacity: 1;
 }
