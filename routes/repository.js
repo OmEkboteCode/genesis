@@ -1,0 +1,104 @@
+const express = require("express");
+const router = express.Router();
+const Repository = require("../models/repository.js");
+const wrapAsync = require("../utils/wrapAsync.js");
+const ExpressError = require("../utils/ExpressError.js");
+const { repositorySchema } = require("../schema.js");
+const User = require("../models/user.js");
+
+const validateRepository = (req, res, next) => {
+  let { error } = repositorySchema.validate(req.body);
+  if (error) {
+    let errorMessage = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errorMessage);
+  } else {
+    next();
+  }
+};
+
+//Index Route
+
+router.get(
+  "/",
+  wrapAsync(async (req, res) => {
+    const allRepository = await Repository.find({}).populate("owner");
+    res.render("repositories/index.ejs", { allRepository });
+  }),
+);
+
+// New Route
+
+router.get("/new", (req, res) => {
+  res.render("repositories/new.ejs");
+});
+
+// Show Route
+
+router.get(
+  "/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    const repository = await Repository.findById(id).populate("owner");
+    console.log(repository);
+    res.render("repositories/show.ejs", { repository });
+  }),
+);
+
+// Create Route
+
+router.post(
+  "/",
+  validateRepository,
+  wrapAsync(async (req, res, next) => {
+    const username = req.body.repository.owner;
+    const existingUser = await User.findOne({ username: username });
+    if (existingUser === null) {
+      throw new ExpressError(404, "User Not Found");
+    }
+
+    const newRepository = new Repository({
+      ...req.body.repository,
+      owner: existingUser._id,
+    });
+
+    await newRepository.save();
+    res.redirect("/repositories");
+  }),
+);
+
+// Edit Route
+
+router.get(
+  "/:id/edit",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    const repository = await Repository.findById(id).populate("owner");
+    res.render("repositories/edit.ejs", { repository });
+  }),
+);
+
+// Update Route
+
+router.put(
+  "/:id",
+  validateRepository,
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    await Repository.findByIdAndUpdate(id, { ...req.body.repository });
+    res.redirect(`/repositories/${id}`);
+  }),
+);
+
+// Delete Route
+
+router.delete(
+  "/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    let deletedRepository = await Repository.findByIdAndDelete(id);
+    console.log(deletedRepository);
+    res.redirect("/repositories");
+  }),
+);
+
+module.exports = router;

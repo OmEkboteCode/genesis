@@ -3,13 +3,12 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
-const Repository = require("./models/repository.js");
-const User = require("./models/user.js");
-const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const ejsMate = require("ejs-mate");
-const { repositorySchema } = require("./schema.js");
-// const { repositorySchema } = require("./schema.js")
+
+
+const repositories = require("./routes/repository.js");
+const users = require("./routes/user.js");
 
 const MONGO_URL = `mongodb://127.0.0.1:27017/genesis`;
 
@@ -36,131 +35,10 @@ app.get("/", (req, res) => {
   res.send("Working");
 });
 
-const validateRepository = (req, res, next) => {
-  let { error } = repositorySchema.validate(req.body);
-  if (error) {
-    let errorMessage = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errorMessage);
-  } else {
-    next();
-  }
-};
 
-//Index Route
 
-app.get(
-  "/repositories",
-  wrapAsync(async (req, res) => {
-    const allRepository = await Repository.find({}).populate("owner");
-    res.render("repositories/index.ejs", { allRepository });
-  }),
-);
-
-// New Route
-
-app.get("/repositories/new", (req, res) => {
-  res.render("repositories/new.ejs");
-});
-
-// Show Route
-
-app.get(
-  "/repositories/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const repository = await Repository.findById(id).populate("owner");
-    console.log(repository);
-    res.render("repositories/show.ejs", { repository });
-  }),
-);
-
-// Create Route
-
-app.post(
-  "/repositories",
-  validateRepository,
-  wrapAsync(async (req, res, next) => {
-    const username = req.body.repository.owner;
-    const existingUser = await User.findOne({ username: username });
-    if (existingUser === null) {
-      throw new ExpressError(404, "User Not Found");
-    }
-
-    const newRepository = new Repository({
-      ...req.body.repository,
-      owner: existingUser._id,
-    });
-
-    await newRepository.save();
-    res.redirect("/repositories");
-  }),
-);
-
-// Edit Route
-
-app.get(
-  "/repositories/:id/edit",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const repository = await Repository.findById(id).populate("owner");
-    res.render("repositories/edit.ejs", { repository });
-  }),
-);
-
-// Update Route
-
-app.put(
-  "/repositories/:id",
-  validateRepository,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Repository.findByIdAndUpdate(id, { ...req.body.repository });
-    res.redirect(`/repositories/${id}`);
-  }),
-);
-
-// Delete Route
-
-app.delete(
-  "/repositories/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedRepository = await Repository.findByIdAndDelete(id);
-    console.log(deletedRepository);
-    res.redirect("/repositories");
-  }),
-);
-
-// Users
-
-app.get(
-  "/users",
-  wrapAsync(async (req, res) => {
-    const allUsers = await User.find({});
-    res.render("users/index.ejs", { allUsers });
-  }),
-);
-
-app.get(
-  "/users/:id/repositories",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const user = await User.findById(id);
-    const repositories = await Repository.find({ owner: id });
-    res.render("users/show.ejs", { repositories, user });
-  }),
-);
-
-// Delete User Route
-
-app.delete(
-  "/users/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await User.findByIdAndDelete(id);
-    res.redirect("/users");
-  }),
-);
+app.use("/repositories", repositories);
+app.use("/users", users);
 
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
