@@ -1,0 +1,132 @@
+body {
+    background-color: #ffffff;
+    color: #24292f;
+}
+
+/* Navbar */
+
+.navbar {
+    background-color: #f6f8fa !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    color: #57606a;
+}
+
+.nav-link:hover {
+    color: #24292f;
+}
+
+
+/* Page */
+
+.container {
+    max-width: 1000px;
+}
+
+
+/* Repository List */
+
+.repository-list {
+    border-top: 1px solid #d0d7de;
+}
+
+.repository-item {
+    border-bottom: 1px solid #d0d7de;
+}
+
+.repository-item h5 {
+    font-weight: 600;
+}
+
+.repository-item a {
+    color: #0969da;
+}
+
+.repository-item a:hover {
+    text-decoration: underline !important;
+}
+
+.repository-owner {
+    color: #57606a;
+    font-size: 14px;
+}
+
+.repository-date {
+    color: #6e7781;
+    font-size: 13px;
+}
+
+
+/* Repository Details */
+
+.show-card {
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.show-card .card-body {
+    padding: 28px;
+}
+
+.repository-title {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+
+/* Forms */
+
+.form-control,
+.form-select {
+    border-color: #d0d7de;
+    border-radius: 6px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #0969da;
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+
+/* Buttons */
+
+.btn {
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #1f883d;
+    border-color: #1f883d;
+}
+
+.btn-primary:hover {
+    background-color: #1a7f37;
+    border-color: #1a7f37;
+}
+
+
+/* Users */
+
+.user-item {
+    border-bottom: 1px solid #d0d7de;
+}
+
+.user-item a {
+    color: #0969da;
+}
+
+.user-item a:hover {
+    text-decoration: underline !important;
+}

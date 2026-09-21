@@ -1,29 +1,37 @@
 <% layout("/layouts/boilerplate") %>
 
 <main class="container py-4">
+
     <div class="mb-4">
-        <h4>All Users</h4>
+        <h3 class="mb-1">Users</h3>
+        <p class="text-muted mb-0">
+            Developers using Genesis
+        </p>
     </div>
 
     <div class="users-list">
+
         <% for(let user of allUsers) { %>
 
-            <div class="user-item py-4 border-bottom">
+            <div class="user-item py-4">
 
-                <div class="d-flex justify-content-between align-items-start">
+                <h4 class="mb-1">
+                    <a
+                        href="/users/<%= user._id %>/repositories"
+                        class="text-decoration-none"
+                    >
+                        <%= user.username %>
+                    </a>
+                </h4>
 
-                    <div class="mb-1">
-                        <h4>
-                            <a href="/users/<%= user._id %>/repositories"
-                            class="text-decoration-none">
-                                <%= user.username %>
-                            </a>
-                        </h4>
-
-                    </div>
-                </div>
+                <small class="text-muted">
+                    View repositories
+                </small>
 
             </div>
+
         <% } %>
+
     </div>
+
 </main>

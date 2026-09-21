@@ -1,70 +1,103 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-4">
-  <div class="col-8 offset-2">
+<main class="container py-4">
 
-    <h3 class="mb-4">Repository Details</h3>
+  <!-- Repository Header -->
+  <div class="repo-header pb-3 border-bottom">
 
-    <div class="card show-card">
+    <div class="d-flex justify-content-between align-items-start">
 
-      <div class="card-body">
+      <div>
 
-        <!-- Repository Name -->
-        <h4 class="card-title mb-3">
+
+        <h2 class="repo-title">
           <%= repository.name %>
-        </h4>
+        </h2>
+        <div class="repo-owner">
+          <%= repository.owner.username %>
+        </div>
 
-        <!-- Description -->
-        <p class="card-text">
+        <p class="repo-description">
+          <%= repository.description || "No description provided." %>
+        </p>
+      </div>
+
+      <span class="badge rounded-pill border text-dark">
+        <%= repository.visibility %>
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- Repository Information -->
+  <div class="repo-info py-4">
+
+    <div class="row">
+
+      <div class="col-md-8">
+
+        <h5>About this repository</h5>
+
+        <p class="text-muted">
           <%= repository.description || "No description provided." %>
         </p>
 
-        <hr>
+      </div>
 
-        <!-- Repository Information -->
-        <p class="card-text">
-          <strong>Language:</strong>
+      <div class="col-md-4">
+
+        <p class="mb-2">
+          <strong>Language</strong>
+        </p>
+
+        <p class="text-muted">
           <%= repository.language || "Not specified" %>
         </p>
 
-        <p class="card-text">
-          <strong>Visibility:</strong>
-          <%= repository.visibility %>
+        <p class="mb-2 mt-3">
+          <strong>Created</strong>
         </p>
 
-        <p class="card-text">
-          <strong>Owner:</strong>
-          <%= repository.owner.username || "Not specified" %>
-        </p>
-
-        <p class="card-text">
-          <strong>Created:</strong>
+        <p class="text-muted">
           <%= repository.createdAt.toLocaleString() %>
         </p>
-
-        <!-- Actions -->
-        <div class="mt-4">
-          <a
-            href="/repositories/<%= repository._id %>/edit"
-            class="btn btn-success"
-          >
-            Edit
-          </a>
-          <form method="POST" action="/repositories/<%= repository._id %>?_method=DELETE">
-            <button class="btn btn-success">Delete</button>
-          </form>
-
-          <a
-            href="/repositories"
-            class="btn btn-secondary"
-          >
-            Back to Repositories
-          </a>
-        </div>
 
       </div>
 
     </div>
 
   </div>
-</div>
+
+
+  <!-- Actions -->
+  <div class="border-top pt-3">
+
+    <a
+      href="/repositories/<%= repository._id %>/edit"
+      class="btn btn-outline-primary me-2"
+    >
+      Edit
+    </a>
+
+    <form
+      method="POST"
+      action="/repositories/<%= repository._id %>?_method=DELETE"
+      class="d-inline"
+    >
+      <button class="btn btn-outline-danger">
+        Delete
+      </button>
+    </form>
+
+    <a
+      href="/repositories"
+      class="btn btn-outline-secondary ms-2"
+    >
+      Back
+    </a>
+
+  </div>
+
+</main>

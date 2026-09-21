@@ -40,6 +40,7 @@ router.get("/recent", (req, res) => {
   if (id === undefined) {
     return res.send("You Haven't Viewed Any Repositories Yet.");
   }
+  console.log(id)
   res.redirect(`/repositories/${id}`);
 });
 

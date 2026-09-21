@@ -2,20 +2,34 @@
 
 <main class="container py-4">
 
-    <div class="mb-4">
-        <h3>All Repositories</h3>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h3 class="mb-1">Repositories</h3>
+            <p class="text-muted mb-0">
+                Browse repositories in Genesis
+            </p>
+        </div>
+<!-- 
+        <a href="/repositories/new" class="btn btn-primary">
+            New repository
+        </a> -->
+        <a href="/repositories/recent" class="btn btn-outline-secondary">
+            Recently viewed
+        </a>
+
     </div>
 
     <div class="repository-list">
-        <a href="/repositories/recent" class="btn btn-primary" >Recent</a>
 
         <% for(let repository of allRepository) { %>
 
-            <div class="repository-item py-4 border-bottom">
+            <div class="repository-item py-4">
 
                 <div class="d-flex justify-content-between align-items-start">
 
                     <div>
+
                         <h5 class="mb-1">
                             <a
                                 href="/repositories/<%= repository._id %>"
@@ -25,13 +39,14 @@
                             </a>
                         </h5>
 
-                        <p class="text-muted mb-2">
-                            Owner: <%= repository.owner.username %>
+                        <p class="repository-owner mb-1">
+                            <%= repository.owner.username %>
                         </p>
 
-                        <small class="text-muted">
+                        <small class="repository-date">
                             Created <%= repository.createdAt.toLocaleDateString() %>
                         </small>
+
                     </div>
 
                     <span class="badge rounded-pill border text-dark">
