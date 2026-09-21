@@ -36,11 +36,11 @@ router.get("/new", (req, res) => {
 //Recent Route
 
 router.get("/recent", (req, res) => {
-    let id = req.cookies.recentRepoId
-    if (id === undefined){
-        return res.send("You Haven't Viewed Any Repositories Yet.")
-    }
-    res.redirect(`/repositories/${id}`)
+  let id = req.signedCookies.recentRepoId;
+  if (id === undefined) {
+    return res.send("You Haven't Viewed Any Repositories Yet.");
+  }
+  res.redirect(`/repositories/${id}`);
 });
 
 // Show Route
@@ -51,12 +51,10 @@ router.get(
     let { id } = req.params;
     const repository = await Repository.findById(id).populate("owner");
     // console.log(repository);
-    res.cookie("recentRepoId", id);
+    res.cookie("recentRepoId", id, { signed: true });
     res.render("repositories/show.ejs", { repository });
   }),
 );
-
-
 
 // Create Route
 
@@ -114,6 +112,5 @@ router.delete(
     res.redirect("/repositories");
   }),
 );
-
 
 module.exports = router;
