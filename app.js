@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError.js");
 const ejsMate = require("ejs-mate");
+const cookieParser = require("cookie-parser");
 
+app.use(cookieParser("secretcode"));
 
 const repositories = require("./routes/repository.js");
 const users = require("./routes/user.js");
@@ -34,8 +36,6 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.get("/", (req, res) => {
   res.send("Working");
 });
-
-
 
 app.use("/repositories", repositories);
 app.use("/users", users);

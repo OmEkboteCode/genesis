@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 const Repository = require("../models/repository.js");
 const wrapAsync = require("../utils/wrapAsync.js");
@@ -32,6 +33,16 @@ router.get("/new", (req, res) => {
   res.render("repositories/new.ejs");
 });
 
+//Recent Route
+
+router.get("/recent", (req, res) => {
+    let id = req.cookies.recentRepoId
+    if (id === undefined){
+        return res.send("You Haven't Viewed Any Repositories Yet.")
+    }
+    res.redirect(`/repositories/${id}`)
+});
+
 // Show Route
 
 router.get(
@@ -39,10 +50,13 @@ router.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const repository = await Repository.findById(id).populate("owner");
-    console.log(repository);
+    // console.log(repository);
+    res.cookie("recentRepoId", id);
     res.render("repositories/show.ejs", { repository });
   }),
 );
+
+
 
 // Create Route
 
@@ -100,5 +114,6 @@ router.delete(
     res.redirect("/repositories");
   }),
 );
+
 
 module.exports = router;
