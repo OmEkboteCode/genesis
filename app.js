@@ -6,6 +6,22 @@ const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError.js");
 const ejsMate = require("ejs-mate");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const flash = require("connect-flash");
+
+const sessionOptions = {
+  secret: "mysecretcode",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  },
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
 
 app.use(cookieParser("secretcode"));
 
@@ -35,6 +51,23 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.get("/", (req, res) => {
   res.send("Working");
+});
+
+app.get("/session/register", (req, res) => {
+  let { name = "Anonymous" } = req.query;
+  req.session.name = name;
+  console.log(req.session.name);
+  res.redirect("/session/hello");
+});
+
+app.get("/session/flash", (req, res) => {
+  req.flash("success", "This is a success message!");
+  res.redirect("/session/hello");
+});
+
+app.get("/session/hello", (req, res) => {
+  let message = req.flash("success");
+  res.send(`Hello, ${req.session.name}. ${message}`);
 });
 
 app.use("/repositories", repositories);
