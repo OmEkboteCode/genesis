@@ -53,21 +53,12 @@ app.get("/", (req, res) => {
   res.send("Working");
 });
 
-app.get("/session/register", (req, res) => {
-  let { name = "Anonymous" } = req.query;
-  req.session.name = name;
-  console.log(req.session.name);
-  res.redirect("/session/hello");
-});
 
-app.get("/session/flash", (req, res) => {
-  req.flash("success", "This is a success message!");
-  res.redirect("/session/hello");
-});
 
-app.get("/session/hello", (req, res) => {
-  let message = req.flash("success");
-  res.send(`Hello, ${req.session.name}. ${message}`);
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
 });
 
 app.use("/repositories", repositories);

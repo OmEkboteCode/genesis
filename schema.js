@@ -6,6 +6,5 @@ module.exports.repositorySchema = Joi.object({
     description: Joi.string().required(),
     language: Joi.string().required(),
     visibility: Joi.string().required(),
-    owner: Joi.string().required(),
   }),
 });

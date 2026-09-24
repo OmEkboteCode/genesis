@@ -40,7 +40,7 @@ router.get("/recent", (req, res) => {
   if (id === undefined) {
     return res.send("You Haven't Viewed Any Repositories Yet.");
   }
-  console.log(id)
+  console.log(id);
   res.redirect(`/repositories/${id}`);
 });
 
@@ -52,7 +52,12 @@ router.get(
     let { id } = req.params;
     const repository = await Repository.findById(id).populate("owner");
     // console.log(repository);
+    if (!repository) {
+      req.flash("error", "Repository You Requested For Does Not Exist");
+      return res.redirect("/repositories");
+    }
     res.cookie("recentRepoId", id, { signed: true });
+
     res.render("repositories/show.ejs", { repository });
   }),
 );
@@ -66,7 +71,9 @@ router.post(
     const username = req.body.repository.owner;
     const existingUser = await User.findOne({ username: username });
     if (existingUser === null) {
-      throw new ExpressError(404, "User Not Found");
+      req.flash("error", "User Not Found");
+      // throw new ExpressError(404, "User Not Found");
+      return res.redirect("/repositories/new");
     }
 
     const newRepository = new Repository({
@@ -75,6 +82,7 @@ router.post(
     });
 
     await newRepository.save();
+    req.flash("success", "New Repository Created!");
     res.redirect("/repositories");
   }),
 );
@@ -86,6 +94,10 @@ router.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const repository = await Repository.findById(id).populate("owner");
+    if (!repository) {
+      req.flash("error", "Repository You Requested For Does Not Exist");
+      return res.redirect("/repositories");
+    }
     res.render("repositories/edit.ejs", { repository });
   }),
 );
@@ -98,6 +110,7 @@ router.put(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Repository.findByIdAndUpdate(id, { ...req.body.repository });
+    req.flash("success", "Repository Updated!");
     res.redirect(`/repositories/${id}`);
   }),
 );
@@ -110,6 +123,7 @@ router.delete(
     let { id } = req.params;
     let deletedRepository = await Repository.findByIdAndDelete(id);
     console.log(deletedRepository);
+    req.flash("success", "Repository Deleted!");
     res.redirect("/repositories");
   }),
 );
