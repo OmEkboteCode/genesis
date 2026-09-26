@@ -4,6 +4,7 @@ const User = require("../models/user.js");
 const Repository = require("../models/repository.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
+const { userSchema } = require("../schema.js");
 
 const validateUser = (req, res, next) => {
   let { error } = userSchema.validate(req.body);

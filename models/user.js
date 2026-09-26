@@ -1,12 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Repository = require("./repository.js")
+const Repository = require("./repository.js");
+const passportLocalMongoose = require("passport-local-mongoose").default;
 
 const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-  },
   email: {
     type: String,
     required: true,
@@ -17,6 +14,8 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.plugin(passportLocalMongoose);
+
 userSchema.post("findOneAndDelete", async (user) => {
   if (user) {
     await Repository.deleteMany({ owner: user._id });
@@ -24,4 +23,3 @@ userSchema.post("findOneAndDelete", async (user) => {
 });
 
 module.exports = mongoose.model("User", userSchema);
-
