@@ -54,16 +54,34 @@ router.get("/signup", (req, res) => {
 router.post(
   "/signup",
   wrapAsync(async (req, res) => {
+    try {
       let { username, email, password } = req.body;
       const newUser = new User({ email, username });
-      const registeredUser = await User.register(newUser, password)
+      const registeredUser = await User.register(newUser, password);
       console.log(registeredUser);
       req.flash("success", "Welcome To Genesis!");
       res.redirect("/repositories");
-
-      // req.flash("error", err.message);
-      // res.redirect("/users/signup");
+    } catch (err) {
+      req.flash("error", err.message);
+      res.redirect("/users/signup");
+    }
   }),
+);
+
+router.get("/login", (req, res) => {
+  res.render("users/login.ejs");
+});
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
+  async(req,res) => {
+    req.flash("success", "Welcome Back To Genesis!");
+    res.redirect("/repositories")
+  }
 );
 
 module.exports = router;
