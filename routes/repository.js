@@ -6,6 +6,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const { repositorySchema } = require("../schema.js");
 const User = require("../models/user.js");
+const { isLoggedIn } = require("../middleware.js");
 
 const validateRepository = (req, res, next) => {
   let { error } = repositorySchema.validate(req.body);
@@ -29,7 +30,9 @@ router.get(
 
 // New Route
 
-router.get("/new", (req, res) => {
+router.get("/new",
+  isLoggedIn,
+   (req, res) => {
   res.render("repositories/new.ejs");
 });
 
@@ -66,6 +69,7 @@ router.get(
 
 router.post(
   "/",
+  isLoggedIn,
   validateRepository,
   wrapAsync(async (req, res, next) => {
     const username = req.body.repository.owner;
@@ -91,6 +95,7 @@ router.post(
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const repository = await Repository.findById(id).populate("owner");
@@ -106,6 +111,7 @@ router.get(
 
 router.put(
   "/:id",
+  isLoggedIn,
   validateRepository,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -119,6 +125,7 @@ router.put(
 
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedRepository = await Repository.findByIdAndDelete(id);

@@ -6,6 +6,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 // const ExpressError = require("../utils/ExpressError.js");
 // const { userSchema } = require("../schema.js");
 const passport = require("passport");
+const { isLoggedIn } = require("../middleware.js");
 
 // const validateUser = (req, res, next) => {
 //   let { error } = userSchema.validate(req.body);
@@ -41,6 +42,7 @@ router.get(
 
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await User.findByIdAndDelete(id);
@@ -75,13 +77,24 @@ router.get("/login", (req, res) => {
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureRedirect: "/login",
+    failureRedirect: "/users/login",
     failureFlash: true,
   }),
-  async(req,res) => {
+  async (req, res) => {
     req.flash("success", "Welcome Back To Genesis!");
-    res.redirect("/repositories")
-  }
+    res.redirect("/repositories");
+  },
+);
+router.post(
+  "/logout",
+  passport.authenticate("local", {
+    failureRedirect: "/users/login",
+    failureFlash: true,
+  }),
+  async (req, res) => {
+    req.flash("success", "Welcome Back To Genesis!");
+    res.redirect("/repositories");
+  },
 );
 
 module.exports = router;
