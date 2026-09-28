@@ -85,16 +85,14 @@ router.post(
     res.redirect("/repositories");
   },
 );
-router.post(
-  "/logout",
-  passport.authenticate("local", {
-    failureRedirect: "/users/login",
-    failureFlash: true,
-  }),
-  async (req, res) => {
-    req.flash("success", "Welcome Back To Genesis!");
+router.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    req.flash("success", "You Are Logged Out!");
     res.redirect("/repositories");
-  },
-);
+  });
+});
 
 module.exports = router;
