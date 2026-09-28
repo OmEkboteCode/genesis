@@ -6,7 +6,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 // const ExpressError = require("../utils/ExpressError.js");
 // const { userSchema } = require("../schema.js");
 const passport = require("passport");
-const { isLoggedIn } = require("../middleware.js");
+const { isLoggedIn, saveRedirectUrl } = require("../middleware.js");
 
 // const validateUser = (req, res, next) => {
 //   let { error } = userSchema.validate(req.body);
@@ -81,15 +81,21 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
+  saveRedirectUrl,
   passport.authenticate("local", {
     failureRedirect: "/users/login",
     failureFlash: true,
   }),
   async (req, res) => {
     req.flash("success", "Welcome Back To Genesis!");
-    res.redirect("/repositories");
+    let redirectUrl = res.locals.redirectUrl || "/repositories"
+    res.redirect(redirectUrl);
   },
 );
+
+
+
+
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {
