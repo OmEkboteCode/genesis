@@ -17,8 +17,8 @@
           <%= repository.owner.username %>
         </div>
 
-        <p class="repo-description">
-          <%= repository.description || "No description provided." %>
+        <!-- <p class="repo-description">
+          <%= repository.description || "No description provided." %> -->
         </p>
       </div>
 
@@ -70,7 +70,7 @@
 
   </div>
 
-
+  <% if(currentUser && repository.owner._id.equals(currentUser._id)) {%>
   <!-- Actions -->
   <div class="border-top pt-3">
 
@@ -99,5 +99,5 @@
     </a>
 
   </div>
-
+  <% } %>
 </main>
