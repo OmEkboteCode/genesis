@@ -72,17 +72,10 @@ router.post(
   isLoggedIn,
   validateRepository,
   wrapAsync(async (req, res, next) => {
-    const username = req.body.repository.owner;
-    const existingUser = await User.findOne({ username: username });
-    if (existingUser === null) {
-      req.flash("error", "User Not Found");
-      // throw new ExpressError(404, "User Not Found");
-      return res.redirect("/repositories/new");
-    }
 
     const newRepository = new Repository({
       ...req.body.repository,
-      owner: existingUser._id,
+      owner: req.user._id,
     });
 
     await newRepository.save();
