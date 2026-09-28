@@ -61,8 +61,13 @@ router.post(
       const newUser = new User({ email, username });
       const registeredUser = await User.register(newUser, password);
       console.log(registeredUser);
-      req.flash("success", "Welcome To Genesis!");
-      res.redirect("/repositories");
+      req.login(registeredUser, (err) => {
+        if (err) {
+          return next(err);
+        }
+        req.flash("success", "Welcome To Genesis!");
+        res.redirect("/repositories");
+      });
     } catch (err) {
       req.flash("error", err.message);
       res.redirect("/users/signup");
