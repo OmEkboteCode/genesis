@@ -3,10 +3,10 @@ const router = express.Router({ mergeParams: true });
 const User = require("../models/user.js");
 const Repository = require("../models/repository.js");
 const wrapAsync = require("../utils/wrapAsync.js");
-// const ExpressError = require("../utils/ExpressError.js");
-// const { userSchema } = require("../schema.js");
+
 const passport = require("passport");
 const { isLoggedIn, saveRedirectUrl, isOwner } = require("../middleware.js");
+const userController = require("../controllers/user.js")
 
 // const validateUser = (req, res, next) => {
 //   let { error } = userSchema.validate(req.body);
@@ -22,20 +22,12 @@ const { isLoggedIn, saveRedirectUrl, isOwner } = require("../middleware.js");
 
 router.get(
   "/",
-  wrapAsync(async (req, res) => {
-    const allUsers = await User.find({});
-    res.render("users/index.ejs", { allUsers });
-  }),
+  wrapAsync(userController.index),
 );
 
 router.get(
   "/:id/repositories",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const user = await User.findById(id);
-    const repositories = await Repository.find({ owner: id });
-    res.render("users/show.ejs", { repositories, user });
-  }),
+  wrapAsync(userController.redirectToRepos),
 );
 
 // Delete User Route
@@ -44,41 +36,17 @@ router.delete(
   "/:id",
   isLoggedIn,
   isOwner,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await User.findByIdAndDelete(id);
-    res.redirect("/users");
-  }),
+  wrapAsync(userController.destroyUser),
 );
 
-router.get("/signup", (req, res) => {
-  res.render("users/signup.ejs");
-});
+router.get("/signup", userController.renderSignupForm);
+
 router.post(
   "/signup",
-  wrapAsync(async (req, res) => {
-    try {
-      let { username, email, password } = req.body;
-      const newUser = new User({ email, username });
-      const registeredUser = await User.register(newUser, password);
-      console.log(registeredUser);
-      req.login(registeredUser, (err) => {
-        if (err) {
-          return next(err);
-        }
-        req.flash("success", "Welcome To Genesis!");
-        res.redirect("/repositories");
-      });
-    } catch (err) {
-      req.flash("error", err.message);
-      res.redirect("/users/signup");
-    }
-  }),
+  wrapAsync(userController.signup),
 );
 
-router.get("/login", (req, res) => {
-  res.render("users/login.ejs");
-});
+router.get("/login", userController.renderLoginForm);
 
 router.post(
   "/login",
@@ -87,21 +55,9 @@ router.post(
     failureRedirect: "/users/login",
     failureFlash: true,
   }),
-  async (req, res) => {
-    req.flash("success", "Welcome Back To Genesis!");
-    let redirectUrl = res.locals.redirectUrl || "/repositories";
-    res.redirect(redirectUrl);
-  },
+  userController.login
 );
 
-router.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.flash("success", "You Are Logged Out!");
-    res.redirect("/repositories");
-  });
-});
+router.get("/logout", userController.logout);
 
 module.exports = router;

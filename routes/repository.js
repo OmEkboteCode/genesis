@@ -1,55 +1,31 @@
 const express = require("express");
 
 const router = express.Router();
-const Repository = require("../models/repository.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 
 const { isLoggedIn, isOwner, validateRepository } = require("../middleware.js");
-
+const repositoryController = require("../controllers/repository.js")
 
 //Index Route
 
 router.get(
   "/",
-  wrapAsync(async (req, res) => {
-    const allRepository = await Repository.find({}).populate("owner");
-    res.render("repositories/index.ejs", { allRepository });
-  }),
+  wrapAsync(repositoryController.index),
 );
 
 // New Route
 
-router.get("/new", isLoggedIn, (req, res) => {
-  res.render("repositories/new.ejs");
-});
+router.get("/new", isLoggedIn, repositoryController.newForm);
 
 //Recent Route
 
-router.get("/recent", (req, res) => {
-  let id = req.signedCookies.recentRepoId;
-  if (id === undefined) {
-    return res.send("You Haven't Viewed Any Repositories Yet.");
-  }
-  console.log(id);
-  res.redirect(`/repositories/${id}`);
-});
+router.get("/recent", repositoryController.recent);
 
 // Show Route
 
 router.get(
   "/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const repository = await Repository.findById(id).populate("owner");
-    // console.log(repository);
-    if (!repository) {
-      req.flash("error", "Repository You Requested For Does Not Exist");
-      return res.redirect("/repositories");
-    }
-    res.cookie("recentRepoId", id, { signed: true });
-
-    res.render("repositories/show.ejs", { repository });
-  }),
+  wrapAsync(repositoryController.show),
 );
 
 // Create Route
@@ -58,16 +34,7 @@ router.post(
   "/",
   isLoggedIn,
   validateRepository,
-  wrapAsync(async (req, res, next) => {
-    const newRepository = new Repository({
-      ...req.body.repository,
-      owner: req.user._id,
-    });
-
-    await newRepository.save();
-    req.flash("success", "New Repository Created!");
-    res.redirect("/repositories");
-  }),
+  wrapAsync(repositoryController.create),
 );
 
 // Edit Route
@@ -76,15 +43,7 @@ router.get(
   "/:id/edit",
   isLoggedIn,
   isOwner,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const repository = await Repository.findById(id).populate("owner");
-    if (!repository) {
-      req.flash("error", "Repository You Requested For Does Not Exist");
-      return res.redirect("/repositories");
-    }
-    res.render("repositories/edit.ejs", { repository });
-  }),
+  wrapAsync(repositoryController.create),
 );
 
 // Update Route
@@ -94,12 +53,7 @@ router.put(
   isLoggedIn,
   isOwner,
   validateRepository,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Repository.findByIdAndUpdate(id, { ...req.body.repository });
-    req.flash("success", "Repository Updated!");
-    res.redirect(`/repositories/${id}`);
-  }),
+  wrapAsync(repositoryController.update),
 );
 
 // Delete Route
@@ -108,13 +62,7 @@ router.delete(
   "/:id",
   isLoggedIn,
   isOwner,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedRepository = await Repository.findByIdAndDelete(id);
-    console.log(deletedRepository);
-    req.flash("success", "Repository Deleted!");
-    res.redirect("/repositories");
-  }),
+  wrapAsync(repositoryController.destroy),
 );
 
 module.exports = router;
