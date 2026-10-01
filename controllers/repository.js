@@ -31,6 +31,16 @@ module.exports.show = async (req, res) => {
   res.render("repositories/show.ejs", { repository });
 };
 
+module.exports.edit = async (req, res) => {
+    let { id } = req.params;
+    const repository = await Repository.findById(id).populate("owner");
+    if (!repository) {
+      req.flash("error", "Repository You Requested For Does Not Exist");
+      return res.redirect("/repositories");
+    }
+    res.render("repositories/edit.ejs", { repository });
+  }
+
 module.exports.create = async (req, res, next) => {
     const newRepository = new Repository({
       ...req.body.repository,
