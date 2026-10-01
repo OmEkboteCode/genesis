@@ -43,5 +43,10 @@ router.get(
   wrapAsync(repositoryController.edit),
 );
 
+// Stars Route
+
+router.post("/:id/star", isLoggedIn, wrapAsync(repositoryController.star));
+
+router.delete("/:id/star", isLoggedIn, wrapAsync(repositoryController.unstar))
 
 module.exports = router;

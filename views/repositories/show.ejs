@@ -27,6 +27,45 @@
       </span>
 
     </div>
+      <div>
+<div class="repo-star-group">
+
+  <% if (currentUser) { %>
+
+    <% if (hasStarred) { %>
+
+      <form
+        method="POST"
+        action="/repositories/<%= repository._id %>/star?_method=DELETE"
+      >
+        <button type="submit" class="star-btn starred">
+          <span class="star-icon">★</span>
+          <span>Starred</span>
+        </button>
+      </form>
+
+    <% } else { %>
+
+      <form
+        method="POST"
+        action="/repositories/<%= repository._id %>/star"
+      >
+        <button type="submit" class="star-btn">
+          <span class="star-icon">☆</span>
+          <span>Star</span>
+        </button>
+      </form>
+
+    <% } %>
+
+  <% } %>
+
+  <div class="star-count">
+    <span><%= repository.stars.length %></span>
+  </div>
+
+</div>
+    </div>
 
   </div>
 

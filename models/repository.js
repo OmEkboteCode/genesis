@@ -25,6 +25,12 @@ const repositorySchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  stars:[
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ]
 });
 
 const Repository = mongoose.model("Repository", repositorySchema);
